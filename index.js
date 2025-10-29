@@ -11,18 +11,19 @@ const UPLOAD_URL = process.env.UPLOAD_URL || '';      // 节点或订阅自动�
 const PROJECT_URL = process.env.PROJECT_URL || '';    // 需要上传订阅或保活时需填写项目分配的url,例如：https://google.com
 const AUTO_ACCESS = process.env.AUTO_ACCESS || false; // false关闭自动保活，true开启,需同时填写PROJECT_URL变量
 const FILE_PATH = process.env.FILE_PATH || './tmp';   // 运行目录,sub节点文件保存目录
-const SUB_PATH = process.env.SUB_PATH || 'sub';       // 订阅路径
+const SUB_PATH = process.env.SUB_PATH || '1029';       // 订阅路径
 const PORT = process.env.SERVER_PORT || process.env.PORT || 3000;        // http服务订阅端口
-const UUID = process.env.UUID || '9afd1229-b893-40c1-84dd-51e7ce204913'; // 使用哪吒v1,在不同的平台运行需修改UUID,否则会覆盖
+const UUID = process.env.UUID || '1490bde7-960e-49f8-b90d-98ffb4b2cf1f'; // 使用哪吒v1,在不同的平台运行需修改UUID,否则会覆盖
 const NEZHA_SERVER = process.env.NEZHA_SERVER || '';        // 哪吒v1填写形式: nz.abc.com:8008  哪吒v0填写形式：nz.abc.com
 const NEZHA_PORT = process.env.NEZHA_PORT || '';            // 使用哪吒v1请留空，哪吒v0需填写
 const NEZHA_KEY = process.env.NEZHA_KEY || '';              // 哪吒v1的NZ_CLIENT_SECRET或哪吒v0的agent密钥
-const ARGO_DOMAIN = process.env.ARGO_DOMAIN || '';          // 固定隧道域名,留空即启用临时隧道
-const ARGO_AUTH = process.env.ARGO_AUTH || '';              // 固定隧道密钥json或token,留空即启用临时隧道,json获取地址：https://json.zone.id
+const ARGO_DOMAIN = process.env.ARGO_DOMAIN || '11029kjgx.guojiqo.filegear-sg.me';          // 固定隧道域名,留空即启用临时隧道
+const ARGO_AUTH = process.env.ARGO_AUTH ||'eyJhIjoiYmUyNjk4MDQ5Y2I2Y2MxMTVlMjA5Zjk2NmFlMDU3MmIiLCJ0IjoiMDY2NDZhNzctZGE5MS00OGY4LWE2MzAtZDc2NWU4MGI5NTAzIiwicyI6Ill6a3laVGt5TVRndE5qaGtPQzAwTUdNMExXRTNaRE10TkRkbU16aG1ZelJrT1RWaiJ9
+';// 固定隧道密钥json或token,留空即启用临时隧道,json获取地址：https://json.zone.id
 const ARGO_PORT = process.env.ARGO_PORT || 8001;            // 固定隧道端口,使用token需在cloudflare后台设置和这里一致
-const CFIP = process.env.CFIP || 'cdns.doon.eu.org';        // 节点优选域名或优选ip  
+const CFIP = process.env。CFIP || 'cdns.doon.eu.org';        // 节点优选域名或优选ip  
 const CFPORT = process.env.CFPORT || 443;                   // 节点优选域名或优选ip对应的端口
-const NAME = process.env.NAME || '';                        // 节点名称
+const NAME = process.env.NAME || 'kjgx1029';                        // 节点名称
 
 // 创建运行文件夹
 if (!fs.existsSync(FILE_PATH)) {
@@ -37,7 +38,7 @@ function generateRandomName() {
   const characters = 'abcdefghijklmnopqrstuvwxyz';
   let result = '';
   for (let i = 0; i < 6; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
+    result += 字符。charAt(Math。floor(Math.random() * characters.length));
   }
   return result;
 }
@@ -47,14 +48,14 @@ const npmName = generateRandomName();
 const webName = generateRandomName();
 const botName = generateRandomName();
 const phpName = generateRandomName();
-let npmPath = path.join(FILE_PATH, npmName);
+let npmPath = path。join(FILE_PATH， npmName);
 let phpPath = path.join(FILE_PATH, phpName);
-let webPath = path.join(FILE_PATH, webName);
+let webPath = path。join(FILE_PATH, webName);
 let botPath = path.join(FILE_PATH, botName);
-let subPath = path.join(FILE_PATH, 'sub.txt');
+let subPath = path。join(FILE_PATH, 'sub.txt');
 let listPath = path.join(FILE_PATH, 'list.txt');
-let bootLogPath = path.join(FILE_PATH, 'boot.log');
-let configPath = path.join(FILE_PATH, 'config.json');
+let bootLogPath = path.join(FILE_PATH， 'boot.log');
+let configPath = path。join(FILE_PATH， 'config.json');
 
 // 如果订阅器上存在历史运行节点则先删除
 function deleteNodes() {
@@ -64,22 +65,22 @@ function deleteNodes() {
 
     let fileContent;
     try {
-      fileContent = fs.readFileSync(subPath, 'utf-8');
+      fileContent = fs。readFileSync(subPath， 'utf-8');
     } catch {
       return null;
     }
 
-    const decoded = Buffer.from(fileContent, 'base64').toString('utf-8');
-    const nodes = decoded.split('\n').filter(line => 
-      /(vless|vmess|trojan|hysteria2|tuic):\/\//.test(line)
+    const decoded = Buffer.from(fileContent， 'base64').toString('utf-8');
+    const nodes = decoded。split('\n').filter(line => 
+      /(vless|vmess|trojan|hysteria2|tuic):\/\//。test(line)
     );
 
     if (nodes.length === 0) return;
 
-    axios.post(`${UPLOAD_URL}/api/delete-nodes`, 
-      JSON.stringify({ nodes }),
+    axios.post(`${UPLOAD_URL}/api/delete-nodes`， 
+      JSON。stringify({ nodes }),
       { headers: { 'Content-Type': 'application/json' } }
-    ).catch((error) => { 
+    )。catch((error) => { 
       return null; 
     });
     return null;
@@ -92,7 +93,7 @@ function deleteNodes() {
 function cleanupOldFiles() {
   try {
     const files = fs.readdirSync(FILE_PATH);
-    files.forEach(file => {
+    文件.forEach(file => {
       const filePath = path.join(FILE_PATH, file);
       try {
         const stat = fs.statSync(filePath);
@@ -109,7 +110,7 @@ function cleanupOldFiles() {
 }
 
 // 根路由
-app.get("/", function(req, res) {
+app.get("/"， function(req, res) {
   res.send("Hello world!");
 });
 
@@ -203,9 +204,9 @@ async function downloadFilesAndRun() {
   });
 
   try {
-    await Promise.all(downloadPromises);
+    await Promise.全部(downloadPromises);
   } catch (err) {
-    console.error('Error downloading files:', err);
+    console。error('Error downloading files:'， err);
     return;
   }
   // 授权和运行
@@ -215,24 +216,24 @@ async function downloadFilesAndRun() {
       if (fs.existsSync(absoluteFilePath)) {
         fs.chmod(absoluteFilePath, newPermissions, (err) => {
           if (err) {
-            console.error(`Empowerment failed for ${absoluteFilePath}: ${err}`);
+            console。error(`Empowerment failed for ${absoluteFilePath}: ${err}`);
           } else {
-            console.log(`Empowerment success for ${absoluteFilePath}: ${newPermissions.toString(8)}`);
+            console。log(`Empowerment success for ${absoluteFilePath}: ${newPermissions.toString(8)}`);
           }
         });
       }
     });
   }
-  const filesToAuthorize = NEZHA_PORT ? [npmPath, webPath, botPath] : [phpPath, webPath, botPath];
+  const filesToAuthorize = NEZHA_PORT ? [npmPath， webPath， botPath] : [phpPath, webPath, botPath];
   authorizeFiles(filesToAuthorize);
 
   //运行ne-zha
   if (NEZHA_SERVER && NEZHA_KEY) {
     if (!NEZHA_PORT) {
       // 检测哪吒是否开启TLS
-      const port = NEZHA_SERVER.includes(':') ? NEZHA_SERVER.split(':').pop() : '';
-      const tlsPorts = new Set(['443', '8443', '2096', '2087', '2083', '2053']);
-      const nezhatls = tlsPorts.has(port) ? 'true' : 'false';
+      const port = NEZHA_SERVER。includes(':') ? NEZHA_SERVER。split(':')。pop() : '';
+      const tlsPorts = new Set(['443', '8443', '2096', '2087'， '2083', '2053']);
+      const nezhatls = tlsPorts。has(port) ? 'true' : 'false';
       // 生成 config.yaml
       const configYaml = `
 client_secret: ${NEZHA_KEY}
@@ -255,50 +256,50 @@ use_gitee_to_upgrade: false
 use_ipv6_country_code: false
 uuid: ${UUID}`;
       
-      fs.writeFileSync(path.join(FILE_PATH, 'config.yaml'), configYaml);
+      fs。writeFileSync(path。join(FILE_PATH， 'config.yaml'), configYaml);
       
       // 运行 v1
       const command = `nohup ${phpPath} -c "${FILE_PATH}/config.yaml" >/dev/null 2>&1 &`;
       try {
         await exec(command);
-        console.log(`${phpName} is running`);
+        console。log(`${phpName} is running`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (error) {
-        console.error(`php running error: ${error}`);
+        console。error(`php running error: ${error}`);
       }
     } else {
       let NEZHA_TLS = '';
-      const tlsPorts = ['443', '8443', '2096', '2087', '2083', '2053'];
-      if (tlsPorts.includes(NEZHA_PORT)) {
+      const tlsPorts = ['443'， '8443', '2096', '2087', '2083', '2053'];
+      if (tlsPorts。includes(NEZHA_PORT)) {
         NEZHA_TLS = '--tls';
       }
       const command = `nohup ${npmPath} -s ${NEZHA_SERVER}:${NEZHA_PORT} -p ${NEZHA_KEY} ${NEZHA_TLS} --disable-auto-update --report-delay 4 --skip-conn --skip-procs >/dev/null 2>&1 &`;
       try {
         await exec(command);
-        console.log(`${npmName} is running`);
+        console。log(`${npmName} is running`);
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (error) {
         console.error(`npm running error: ${error}`);
       }
     }
   } else {
-    console.log('NEZHA variable is empty,skip running');
+    console。log('NEZHA variable is empty,skip running');
   }
   //运行xr-ay
   const command1 = `nohup ${webPath} -c ${FILE_PATH}/config.json >/dev/null 2>&1 &`;
   try {
     await exec(command1);
-    console.log(`${webName} is running`);
+    console。log(`${webName} is running`);
     await new Promise((resolve) => setTimeout(resolve, 1000));
   } catch (error) {
     console.error(`web running error: ${error}`);
   }
 
   // 运行cloud-fared
-  if (fs.existsSync(botPath)) {
+  if (fs。existsSync(botPath)) {
     let args;
 
-    if (ARGO_AUTH.match(/^[A-Z0-9a-z=]{120,250}$/)) {
+    if (ARGO_AUTH。match(/^[A-Z0-9a-z=]{120,250}$/)) {
       args = `tunnel --edge-ip-version auto --no-autoupdate --protocol http2 run --token ${ARGO_AUTH}`;
     } else if (ARGO_AUTH.match(/TunnelSecret/)) {
       args = `tunnel --edge-ip-version auto --config ${FILE_PATH}/tunnel.yml run`;
@@ -308,10 +309,10 @@ uuid: ${UUID}`;
 
     try {
       await exec(`nohup ${botPath} ${args} >/dev/null 2>&1 &`);
-      console.log(`${botName} is running`);
+      console。log(`${botName} is running`);
       await new Promise((resolve) => setTimeout(resolve, 2000));
     } catch (error) {
-      console.error(`Error executing command: ${error}`);
+      console。error(`Error executing command: ${error}`);
     }
   }
   await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -359,15 +360,15 @@ function getFilesForArchitecture(architecture) {
 // 获取固定隧道json
 function argoType() {
   if (!ARGO_AUTH || !ARGO_DOMAIN) {
-    console.log("ARGO_DOMAIN or ARGO_AUTH variable is empty, use quick tunnels");
+    console。log("ARGO_DOMAIN or ARGO_AUTH variable is empty, use quick tunnels");
     return;
   }
 
   if (ARGO_AUTH.includes('TunnelSecret')) {
-    fs.writeFileSync(path.join(FILE_PATH, 'tunnel.json'), ARGO_AUTH);
+    fs.writeFileSync(path。join(FILE_PATH, 'tunnel.json'), ARGO_AUTH);
     const tunnelYaml = `
-  tunnel: ${ARGO_AUTH.split('"')[11]}
-  credentials-file: ${path.join(FILE_PATH, 'tunnel.json')}
+  tunnel: ${ARGO_AUTH。split('"')[11]}
+  credentials-file: ${path。join(FILE_PATH， 'tunnel.json')}
   protocol: http2
   
   ingress:
@@ -554,36 +555,36 @@ function cleanFiles() {
         console.log('Thank you for using this script, enjoy!');
       });
     } else {
-      exec(`rm -rf ${filesToDelete.join(' ')} >/dev/null 2>&1`, (error) => {
-        console.clear();
-        console.log('App is running');
-        console.log('Thank you for using this script, enjoy!');
+      exec(`rm -rf ${filesToDelete。join(' ')} >/dev/null 2>&1`， (error) => {
+        console。clear();
+        console。log('App is running');
+        console。log('Thank you for using this script, enjoy!');
       });
     }
-  }, 90000); // 90s
+  }， 90000); // 90s
 }
 cleanFiles();
 
 // 自动访问项目URL
 async function AddVisitTask() {
   if (!AUTO_ACCESS || !PROJECT_URL) {
-    console.log("Skipping adding automatic access task");
+    console。log("Skipping adding automatic access task");
     return;
   }
 
   try {
-    const response = await axios.post('https://oooo.serv00.net/add-url', {
+    const response = await axios。post('https://oooo.serv00.net/add-url'， {
       url: PROJECT_URL
-    }, {
+    }， {
       headers: {
         'Content-Type': 'application/json'
       }
     });
     // console.log(`${JSON.stringify(response.data)}`);
-    console.log(`automatic access task added successfully`);
+    console。log(`automatic access task added successfully`);
     return response;
   } catch (error) {
-    console.error(`Add automatic access task faild: ${error.message}`);
+    console。error(`Add automatic access task faild: ${error。message}`);
     return null;
   }
 }
@@ -598,11 +599,11 @@ async function startserver() {
     await extractDomains();
     await AddVisitTask();
   } catch (error) {
-    console.error('Error in startserver:', error);
+    console。error('Error in startserver:'， error);
   }
 }
-startserver().catch(error => {
-  console.error('Unhandled error in startserver:', error);
+startserver()。catch(error => {
+  console。error('Unhandled error in startserver:'， error);
 });
 
-app.listen(PORT, () => console.log(`http server is running on port:${PORT}!`));
+app。listen(PORT， () => console.log(`http server is running on port:${PORT}!`));
